@@ -1,0 +1,696 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+    <title>STHook官网</title>
+    <!-- 使用国内稳定的 BootCDN 加载 Font Awesome 6 -->
+    <link rel="stylesheet" href="https://cdn.bootcdn.net/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #faf9fc;
+            color: #1f1a2e;
+            line-height: 1.5;
+            scroll-behavior: smooth;
+        }
+
+        /* 自定义滚动条 */
+        ::-webkit-scrollbar {
+            width: 8px;
+        }
+        ::-webkit-scrollbar-track {
+            background: #e9e6f2;
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #9f8fd9;
+            border-radius: 8px;
+        }
+        ::-webkit-scrollbar-thumb:hover {
+            background: #7c63c1;
+        }
+
+        /* 整体容器，最大宽度居中，留白舒适 */
+        .container {
+            max-width: 1280px;
+            margin: 0 auto;
+            padding: 0 32px;
+        }
+
+        /* ========= 导航栏 ========= */
+        .navbar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            padding: 24px 0;
+            gap: 20px;
+        }
+        .logo {
+            font-size: 1.9rem;
+            font-weight: 700;
+            letter-spacing: -0.02em;
+            background: linear-gradient(135deg, #5f3dc9, #b05fda);
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+        }
+        .logo i {
+            background: none;
+            -webkit-background-clip: unset;
+            background-clip: unset;
+            color: #7950f2;
+            margin-right: 6px;
+        }
+        .nav-links {
+            display: flex;
+            gap: 36px;
+            list-style: none;
+        }
+        .nav-links a {
+            text-decoration: none;
+            font-weight: 500;
+            color: #2d2a3b;
+            transition: color 0.25s;
+            font-size: 1rem;
+        }
+        .nav-links a:hover {
+            color: #7950f2;
+        }
+        .nav-cta {
+            background: #1f1a2e;
+            color: white !important;
+            padding: 8px 22px;
+            border-radius: 40px;
+            transition: all 0.25s;
+        }
+        .nav-cta:hover {
+            background: #3b2b6b;
+            transform: translateY(-2px);
+        }
+
+        /* 移动端导航适配 */
+        @media (max-width: 700px) {
+            .navbar {
+                flex-direction: column;
+                align-items: flex-start;
+            }
+            .nav-links {
+                flex-wrap: wrap;
+                gap: 20px;
+            }
+            .container {
+                padding: 0 24px;
+            }
+        }
+
+        /* ========= 英雄区（视觉冲击） ========= */
+        .hero {
+            display: flex;
+            flex-wrap: wrap;
+            align-items: center;
+            justify-content: space-between;
+            gap: 40px;
+            margin: 40px 0 60px 0;
+        }
+        .hero-content {
+            flex: 1.2;
+        }
+        .hero-badge {
+            background: #edeaff;
+            display: inline-block;
+            padding: 6px 14px;
+            border-radius: 50px;
+            font-size: 0.8rem;
+            font-weight: 600;
+            color: #5f3dc9;
+            margin-bottom: 24px;
+        }
+        .hero-content h1 {
+            font-size: 3.8rem;
+            font-weight: 700;
+            line-height: 1.2;
+            letter-spacing: -0.02em;
+            background: linear-gradient(to right, #1f1a2e, #5b3e9b);
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+            margin-bottom: 20px;
+        }
+        .hero-content p {
+            font-size: 1.2rem;
+            color: #4a4760;
+            max-width: 550px;
+            margin-bottom: 32px;
+        }
+        .hero-buttons {
+            display: flex;
+            gap: 16px;
+            flex-wrap: wrap;
+        }
+        .btn-primary {
+            background: #7950f2;
+            border: none;
+            padding: 12px 32px;
+            border-radius: 40px;
+            font-weight: 600;
+            color: white;
+            cursor: pointer;
+            transition: all 0.2s;
+            font-size: 1rem;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            text-decoration: none;
+        }
+        .btn-primary:hover {
+            background: #5f3dc9;
+            transform: translateY(-2px);
+            box-shadow: 0 12px 20px -10px rgba(121, 80, 242, 0.4);
+        }
+        .btn-outline {
+            background: transparent;
+            border: 1.5px solid #cbc4e2;
+            padding: 12px 28px;
+            border-radius: 40px;
+            font-weight: 500;
+            color: #2d2a3b;
+            text-decoration: none;
+            transition: all 0.2s;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+        }
+        .btn-outline:hover {
+            border-color: #7950f2;
+            color: #7950f2;
+            transform: translateY(-2px);
+        }
+        .hero-image {
+            flex: 1;
+            background: linear-gradient(145deg, #e2d9ff, #ffffff);
+            border-radius: 48px;
+            padding: 20px;
+            text-align: center;
+            box-shadow: 0 30px 40px -20px rgba(0,0,0,0.1);
+        }
+        .hero-image img {
+            max-width: 100%;
+            width: 320px;
+            height: auto;
+            border-radius: 28px;
+        }
+        /* 装饰波浪分隔 */
+        .wave-divider {
+            margin: 40px 0 20px;
+        }
+
+        /* ========= 特色卡片区 ========= */
+        .section-title {
+            text-align: center;
+            font-size: 2.2rem;
+            font-weight: 700;
+            margin: 60px 0 16px 0;
+            color: #1f1a2e;
+        }
+        .section-sub {
+            text-align: center;
+            color: #6b6882;
+            margin-bottom: 48px;
+            font-size: 1.1rem;
+        }
+        .cards-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 32px;
+            margin: 20px 0 40px;
+        }
+        .card {
+            background: white;
+            border-radius: 32px;
+            padding: 32px 24px;
+            transition: all 0.3s ease;
+            box-shadow: 0 8px 20px rgba(0,0,0,0.02);
+            border: 1px solid #f0edfa;
+            text-align: center;
+        }
+        .card:hover {
+            transform: translateY(-8px);
+            border-color: #d9ceff;
+            box-shadow: 0 24px 36px -12px rgba(89, 57, 181, 0.12);
+        }
+        .card-icon {
+            font-size: 2.8rem;
+            color: #7950f2;
+            margin-bottom: 20px;
+        }
+        .card h3 {
+            font-size: 1.5rem;
+            margin-bottom: 12px;
+            font-weight: 600;
+        }
+        .card p {
+            color: #5b5777;
+            line-height: 1.5;
+        }
+
+        /* 统计/引语区块 */
+        .stats-section {
+            background: #f5f2ff;
+            border-radius: 56px;
+            padding: 48px 40px;
+            margin: 70px 0;
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: space-around;
+            gap: 32px;
+            text-align: center;
+        }
+        .stat-item h2 {
+            font-size: 2.4rem;
+            font-weight: 800;
+            color: #2d2a3b;
+        }
+        .stat-item p {
+            color: #7a74a2;
+            font-weight: 500;
+        }
+
+        /* 关于区域（简洁双列） */
+        .about-wrap {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 48px;
+            align-items: center;
+            margin: 40px 0 70px;
+            background: #ffffffd9;
+            border-radius: 48px;
+            padding: 20px 30px;
+            box-shadow: 0 8px 28px rgba(0,0,0,0.03);
+        }
+        .about-text {
+            flex: 1;
+        }
+        .about-text h2 {
+            font-size: 1.9rem;
+            font-weight: 700;
+            margin-bottom: 18px;
+        }
+        .about-text p {
+            color: #42405c;
+            margin-bottom: 24px;
+        }
+        .about-list {
+            list-style: none;
+            margin-top: 16px;
+        }
+        .about-list li {
+            margin-bottom: 12px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        .about-list i {
+            color: #7950f2;
+            width: 24px;
+        }
+        .about-image {
+            flex: 0.8;
+            background: #e8e2fc;
+            border-radius: 40px;
+            padding: 20px;
+            text-align: center;
+        }
+        .about-image i {
+            font-size: 7rem;
+            color: #5f3dc9;
+        }
+
+        /* 新闻/动态卡片简洁版 */
+        .news-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 28px;
+            margin: 30px 0 50px;
+        }
+        .news-item {
+            background: white;
+            border-radius: 28px;
+            padding: 24px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.02);
+            border: 1px solid #efebfa;
+            transition: 0.2s;
+        }
+        .news-item:hover {
+            border-color: #c7bbf0;
+        }
+        .news-date {
+            font-size: 0.8rem;
+            color: #9b92c2;
+            letter-spacing: 0.5px;
+            margin-bottom: 10px;
+            display: block;
+        }
+        .news-item h4 {
+            font-size: 1.25rem;
+            margin-bottom: 12px;
+        }
+        .news-item p {
+            color: #5f5c7c;
+        }
+
+        /* 联系 CTA */
+        .cta-box {
+            background: linear-gradient(120deg, #1f1a2e, #2e2647);
+            border-radius: 48px;
+            padding: 48px 40px;
+            text-align: center;
+            color: white;
+            margin: 60px 0;
+        }
+        .cta-box h2 {
+            font-size: 2rem;
+            margin-bottom: 16px;
+        }
+        .cta-box p {
+            margin-bottom: 28px;
+            opacity: 0.85;
+        }
+        .cta-btn {
+            background: white;
+            color: #2e2647;
+            padding: 12px 36px;
+            border-radius: 60px;
+            font-weight: 700;
+            text-decoration: none;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            transition: 0.2s;
+        }
+        .cta-btn:hover {
+            background: #e9e2ff;
+            transform: scale(1.02);
+        }
+
+        /* 页脚 */
+        footer {
+            border-top: 1px solid #e2ddf5;
+            padding: 48px 0 32px;
+            margin-top: 40px;
+        }
+        .footer-grid {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: space-between;
+            gap: 40px;
+            margin-bottom: 40px;
+        }
+        .footer-brand p {
+            max-width: 260px;
+            color: #6b6785;
+            margin-top: 12px;
+        }
+        .footer-links {
+            display: flex;
+            gap: 48px;
+            flex-wrap: wrap;
+        }
+        .footer-col h4 {
+            font-weight: 600;
+            margin-bottom: 18px;
+        }
+        .footer-col ul {
+            list-style: none;
+        }
+        .footer-col li {
+            margin-bottom: 12px;
+        }
+        .footer-col a {
+            text-decoration: none;
+            color: #514e72;
+            transition: 0.2s;
+        }
+        .footer-col a:hover {
+            color: #7950f2;
+        }
+        .social-icons {
+            display: flex;
+            gap: 20px;
+            font-size: 1.4rem;
+        }
+        .social-icons a {
+            color: #514e72;
+        }
+        .copyright {
+            text-align: center;
+            color: #8884a8;
+            font-size: 0.85rem;
+            padding-top: 24px;
+            border-top: 1px solid #eceaff;
+        }
+
+        @media (max-width: 780px) {
+            .hero-content h1 {
+                font-size: 2.6rem;
+            }
+            .section-title {
+                font-size: 1.8rem;
+            }
+            .stats-section {
+                flex-direction: column;
+                align-items: center;
+            }
+            .about-wrap {
+                flex-direction: column;
+            }
+        }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <!-- 导航栏 -->
+    <nav class="navbar">
+        <div class="logo">
+            <i class="fas fa-cube"></i> STHook测试版
+        </div>
+        <ul class="nav-links">
+            <li><a href="#">首页</a></li>
+            <li><a href="#">探索</a></li>
+            <li><a href="#">服务</a></li>
+            <li><a href="#">关于</a></li>
+            <li><a href="#" class="nav-cta">开始创作 <i class="fas fa-arrow-right"></i></a></li>
+        </ul>
+    </nav>
+
+    <!-- 英雄区 Hero -->
+    <div class="hero">
+        <div class="hero-content">
+            <div class="hero-badge">
+                <i class="fas fa-bolt"></i> 测试版不代表最终品质
+            </div>
+            <h1>构建卓越的<br>数字体验</h1>
+            <p>极简设计、极致性能，为现代品牌打造令人心动的网站与应用。让你的想法，在互联网上闪闪发光。</p>
+            <div class="hero-buttons">
+                <a href="#" class="btn-primary"><i class="fas fa-magic"></i> 开始体验</a>
+                <a href="#" class="btn-outline"><i class="fas fa-play-circle"></i> 观看案例</a>
+            </div>
+        </div>
+        <div class="hero-image">
+            <!-- 优雅的矢量风格占位图 (使用Font Awesome 和装饰) -->
+            <div style="padding: 16px;">
+                <i class="fas fa-laptop-code" style="font-size: 130px; color: #7950f2; opacity: 0.9;"></i>
+                <div style="margin-top: 10px; background: #efe9ff; border-radius: 80px; padding: 8px 18px; display: inline-block;">
+                    <i class="fas fa-chart-line"></i> +280% 增长
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- 波浪装饰分割 (视觉柔和) -->
+<div class="wave-divider container">
+    <svg viewBox="0 0 1200 30" xmlns="http://www.w3.org/2000/svg" style="width: 100%; height: auto; opacity: 0.3;">
+        <path d="M0,15 C300,0 500,30 800,15 S1100,0 1200,15 L1200,30 L0,30 Z" fill="#9b8ad9"></path>
+    </svg>
+</div>
+
+<div class="container">
+    <!-- 特色卡片 section -->
+    <h2 class="section-title">为什么选择我们</h2>
+    <div class="section-sub">沉浸式体验 · 现代美学 · 高性能代码</div>
+    <div class="cards-grid">
+        <div class="card">
+            <div class="card-icon"><i class="fas fa-palette"></i></div>
+            <h3>独特设计</h3>
+            <p>打破常规，量身定制的视觉语言，让每个项目都有独特气质。</p>
+        </div>
+        <div class="card">
+            <div class="card-icon"><i class="fas fa-code-branch"></i></div>
+            <h3>前沿技术</h3>
+            <p>使用最新 Web 标准，极速加载与无缝交互，用户满意度飙升。</p>
+        </div>
+        <div class="card">
+            <div class="card-icon"><i class="fas fa-rocket"></i></div>
+            <h3>性能至上</h3>
+            <p>SEO 友好，高效架构，让您的网站快人一步，赢得搜索引擎青睐。</p>
+        </div>
+        <div class="card">
+            <div class="card-icon"><i class="fas fa-headset"></i></div>
+            <h3>全周期支持</h3>
+            <p>从构想到上线及后期维护，专业团队随时响应，保驾护航。</p>
+        </div>
+    </div>
+
+    <!-- 统计数据区块 -->
+    <div class="stats-section">
+        <div class="stat-item">
+            <h2>500+</h2>
+            <p>成功项目</p>
+        </div>
+        <div class="stat-item">
+            <h2>1+</h2>
+            <p>满意客户</p>
+        </div>
+        <div class="stat-item">
+            <h2>4.98</h2>
+            <p>客户评分 <i class="fas fa-star" style="color: #f5b042;"></i></p>
+        </div>
+        <div class="stat-item">
+            <h2>24/7</h2>
+            <p>技术支持</p>
+        </div>
+    </div>
+
+    <!-- 关于我们区域 -->
+    <div class="about-wrap">
+        <div class="about-text">
+            <h2>关于灵感空间 <i class="fas fa-feather-alt"></i></h2>
+            <p>我们是一群热爱设计 & 开发的创造者，相信技术应当服务于美与实用。</p>
+            <ul class="about-list">
+                <li><i class="fas fa-check-circle"></i> 国际化设计团队</li>
+                <li><i class="fas fa-check-circle"></i> 完整的前后端解决方案</li>
+                <li><i class="fas fa-check-circle"></i> 无障碍与响应式最佳实践</li>
+                <li><i class="fas fa-check-circle"></i> 可持续迭代的产品路径</li>
+            </ul>
+        </div>
+        <div class="about-image">
+            <i class="fas fa-users-viewfinder"></i>
+            <p style="margin-top: 10px;">协作 · 匠心</p>
+        </div>
+    </div>
+
+    <!-- 最新动态 / 博客摘录 -->
+    <h2 class="section-title" style="margin-top: 20px;">最新洞见</h2>
+    <div class="section-sub">设计趋势 · 技术笔记 · 行业故事</div>
+    <div class="news-grid">
+        <div class="news-item">
+            <span class="news-date"><i class="far fa-calendar-alt"></i> 2026.04.15</span>
+            <h4>AI 时代的设计师新角色</h4>
+            <p>生成式 AI 与创意工作如何共生？我们分享最新实践心得与工作流思考。</p>
+            <a href="#" style="color:#7950f2; text-decoration:none; display:inline-block; margin-top:12px;">阅读更多 →</a>
+        </div>
+        <div class="news-item">
+            <span class="news-date"><i class="far fa-calendar-alt"></i> 2026.04.02</span>
+            <h4>现代 CSS 容器查询实战</h4>
+            <p>彻底告别旧时代响应式痛点，利用容器查询打造真正模块化界面。</p>
+            <a href="#" style="color:#7950f2; text-decoration:none; display:inline-block; margin-top:12px;">阅读更多 →</a>
+        </div>
+        <div class="news-item">
+            <span class="news-date"><i class="far fa-calendar-alt"></i> 2026.03.18</span>
+            <h4>品牌升级案例：重塑数字体验</h4>
+            <p>从视觉识别到交互系统，完整重设计案例复盘，点击查看完整过程。</p>
+            <a href="#" style="color:#7950f2; text-decoration:none; display:inline-block; margin-top:12px;">阅读更多 →</a>
+        </div>
+    </div>
+
+    <!-- 互动CTA提升转化 -->
+    <div class="cta-box">
+        <h2>准备好开启你的项目了吗？</h2>
+        <p>让我们将想法转化为惊艳的现实，一起探索数字世界的无限可能。</p>
+        <a href="#" class="cta-btn"><i class="fas fa-paper-plane"></i> 获取免费咨询</a>
+    </div>
+</div>
+
+<!-- 页脚 Footer -->
+<footer>
+    <div class="container">
+        <div class="footer-grid">
+            <div class="footer-brand">
+                <div class="logo" style="font-size:1.6rem;"><i class="fas fa-cube"></i> 灵感空间</div>
+                <p>启发创造，点亮网络。以匠心打造卓越数字产品。</p>
+                <div class="social-icons" style="margin-top: 20px;">
+                    <a href="#"><i class="fab fa-twitter"></i></a>
+                    <a href="#"><i class="fab fa-instagram"></i></a>
+                    <a href="#"><i class="fab fa-github"></i></a>
+                    <a href="#"><i class="fab fa-linkedin-in"></i></a>
+                </div>
+            </div>
+            <div class="footer-links">
+                <div class="footer-col">
+                    <h4>探索</h4>
+                    <ul>
+                        <li><a href="#">作品展示</a></li>
+                        <li><a href="#">服务流程</a></li>
+                        <li><a href="#">定价方案</a></li>
+                    </ul>
+                </div>
+                <div class="footer-col">
+                    <h4>支持</h4>
+                    <ul>
+                        <li><a href="#">帮助中心</a></li>
+                        <li><a href="#">开发者文档</a></li>
+                        <li><a href="#">状态页面</a></li>
+                    </ul>
+                </div>
+                <div class="footer-col">
+                    <h4>法律</h4>
+                    <ul>
+                        <li><a href="#">隐私政策</a></li>
+                        <li><a href="#">使用条款</a></li>
+                        <li><a href="#">Cookie 声明</a></li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+        <div class="copyright">
+            <i class="far fa-copyright"></i> 2026 灵感空间创意科技 | 版权所有 让设计更有温度
+        </div>
+    </div>
+</footer>
+
+<!-- 简单添加微小交互动画：滚动显现效果（轻柔，可选） -->
+<script>
+    // 轻微的观察者，让卡片渐显更有韵味（增强体验但不影响核心）
+    (function() {
+        const fadeElements = document.querySelectorAll('.card, .news-item, .stat-item, .about-wrap');
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.style.opacity = '1';
+                    entry.target.style.transform = 'translateY(0px)';
+                    observer.unobserve(entry.target);
+                }
+            });
+        }, { threshold: 0.1, rootMargin: "0px 0px -20px 0px" });
+        
+        fadeElements.forEach(el => {
+            el.style.opacity = '0';
+            el.style.transform = 'translateY(20px)';
+            el.style.transition = 'opacity 0.5s ease, transform 0.4s ease';
+            observer.observe(el);
+        });
+        // 针对英雄内容直接显示避免等待
+        document.querySelector('.hero')?.style.setProperty('opacity', '1');
+        document.querySelector('.hero')?.style.setProperty('transform', 'none');
+    })();
+</script>
+</body>
+</html>
